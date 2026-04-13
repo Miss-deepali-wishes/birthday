@@ -13,42 +13,69 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
     }
 
     video {
       width: 100%;
       max-width: 500px;
       height: auto;
-      object-fit: contain;
       background: black;
+    }
+
+    .tap-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+      z-index: 10;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ⚡ same file name -->
-  <video id="video" autoplay playsinline>
+  <!-- VIDEO -->
+  <video id="video" playsinline>
     <source src="video501.mp4" type="video/mp4">
   </video>
 
+  <!-- TAP SCREEN -->
+  <div id="tapScreen" class="tap-screen">
+    Tap to Start ▶
+  </div>
+
   <script>
     const video = document.getElementById("video");
+    const tapScreen = document.getElementById("tapScreen");
 
-    // 🔊 sound ke saath autoplay try
-    window.addEventListener("load", () => {
-      video.play().catch(() => {
-        // agar autoplay block ho gaya to first tap pe start hoga
-        document.body.addEventListener("click", () => {
-          video.play();
-        }, { once: true });
-      });
+    // 🔥 tap pe video + sound dono start
+    tapScreen.addEventListener("click", () => {
+      video.muted = false;
+      video.currentTime = 0;
+      video.play();
+
+      tapScreen.style.display = "none";
     });
 
-    // 🎬 last frame freeze
+    // 🎬 end hone ke baad freeze + close
     video.addEventListener("ended", () => {
       video.pause();
       video.currentTime = video.duration;
+
+      setTimeout(() => {
+        window.open('', '_self');
+        window.close();
+
+        document.body.innerHTML = "<h2 style='color:white;text-align:center;'>Closed ✔</h2>";
+      }, 3000);
     });
   </script>
 
