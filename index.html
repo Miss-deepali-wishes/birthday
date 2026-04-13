@@ -23,7 +23,7 @@
       background: black;
     }
 
-    .tap-screen {
+    .screen {
       position: absolute;
       top: 0;
       left: 0;
@@ -36,6 +36,7 @@
       color: white;
       font-size: 18px;
       z-index: 10;
+      text-align: center;
     }
   </style>
 </head>
@@ -47,35 +48,41 @@
     <source src="video501.mp4" type="video/mp4">
   </video>
 
-  <!-- TAP SCREEN -->
-  <div id="tapScreen" class="tap-screen">
+  <!-- START SCREEN -->
+  <div id="startScreen" class="screen">
     Tap to Start ▶
+  </div>
+
+  <!-- RESTART SCREEN -->
+  <div id="restartScreen" class="screen" style="display:none;">
+    Tap to play again 🔁
   </div>
 
   <script>
     const video = document.getElementById("video");
-    const tapScreen = document.getElementById("tapScreen");
+    const startScreen = document.getElementById("startScreen");
+    const restartScreen = document.getElementById("restartScreen");
 
-    // 🔥 tap pe video + sound dono start
-    tapScreen.addEventListener("click", () => {
+    // ▶ START
+    startScreen.addEventListener("click", () => {
+      video.currentTime = 0;
       video.muted = false;
+      video.play();
+
+      startScreen.style.display = "none";
+    });
+
+    // 🔁 RESTART
+    restartScreen.addEventListener("click", () => {
       video.currentTime = 0;
       video.play();
 
-      tapScreen.style.display = "none";
+      restartScreen.style.display = "none";
     });
 
-    // 🎬 end hone ke baad freeze + close
+    // 🎬 END → show restart
     video.addEventListener("ended", () => {
-      video.pause();
-      video.currentTime = video.duration;
-
-      setTimeout(() => {
-        window.open('', '_self');
-        window.close();
-
-        document.body.innerHTML = "<h2 style='color:white;text-align:center;'>Closed ✔</h2>";
-      }, 3000);
+      restartScreen.style.display = "flex";
     });
   </script>
 
